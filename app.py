@@ -1,17 +1,19 @@
-from flask import Flask, jsonify,request,render_template,url_for
+from flask import Flask, jsonify,request,render_template,url_for,flash,redirect
 from sqlalchemy.orm import sessionmaker
-from models import Users,Job
-from database import session
+from models import Users,Job,Hirer
+from database import session as db_session
+from werkzeug.security import generate_password_hash, check_password_hash
 from flask_cors import CORS
 import json
 
 
 app = Flask(__name__)
 CORS(app)
+app.config['SECRET_KEY'] = 'R0ZGAR_BUZZ_F4RALL' 
 
 @app.route('/')
 def index():
-    jobs=session.query(Job).all()
+    jobs=db_session.query(Job).all()
     return render_template('index.html',jobs=jobs)
 
 @app.route('/account/')
@@ -19,10 +21,50 @@ def index():
 def accountpage():
     return render_template('accountpage.html')
 
-@app.route('/hirersignup/')
-
+@app.route('/hirersignup/', methods=['GET', 'POST'])
 def hirersignup():
+    if request.method == 'POST':
+        firstname = request.form['firstname']
+        lastname = request.form['lastname']
+        phone_number = request.form['phone_number']
+        email = request.form['email']
+        password = request.form['password']
+        confirm_password = request.form['confirm-password']
+        country = request.form['country']
+        state = request.form['state']
+        city = request.form['city']
+        
+        # Check if the passwords match
+        if password != confirm_password:
+            flash("Passwords do not match", "danger")
+            return redirect(url_for('hirersignup'))
+
+        # Hash the password before saving
+        hashed_password = generate_password_hash(password, method='sha256')
+
+        # Create a new Hirer instance
+        new_hirer = Hirer(
+            firstname=firstname,
+            lastname=lastname,
+            phone_number=phone_number,
+            email=email,
+            password=hashed_password,
+            location=f"{city}, {state}, {country}"
+        )
+        
+        # Add to database and commit the transaction
+        try:
+            db_session.add(new_hirer)
+            db_session.commit()
+            flash("Signup successful! Please verify your email.", "success")
+            return redirect(url_for('hirersignup'))  # Or redirect to login page
+        except Exception as e:
+            db_session.rollback()
+            flash("An error occurred. Please try again.", "danger")
+            return redirect(url_for('hirersignup'))
+
     return render_template('hirersignup.html')
+
 
 
 @app.route('/add-job', methods=['POST'])
@@ -44,8 +86,8 @@ def addjob():
     obj = Job( title=title, description=description, pincode=pincode)
 
     # Add the object to the database session and commit
-    session.add(obj)
-    session.commit()
+    db_session.add(obj)
+    db_session.commit()
 
     # Return a response
     return jsonify({"message": "Job added successfully"}), 201
@@ -53,7 +95,7 @@ def addjob():
 
 @app.route('/show-jobs')
 def showjobs():
-    jobs=session.query(Job).all()
+    jobs=db_session.query(Job).all()
     
     job_list=[]
     for job in jobs:

@@ -25,7 +25,8 @@ class Hirer(base):
     lastname = Column(String(100), nullable=False)
     phone_number = Column(String(15), nullable=False, unique=True)
     verified = Column(String(10), default="NO")
-    pincode = Column(Integer, nullable=False)
+    Location = Column(String(255), nullable=False)
+    role=Column(String(255),default='Hirer')
     
     
     # Relationship to the Job model
