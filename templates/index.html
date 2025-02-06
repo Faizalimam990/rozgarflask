@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Rozgar Buzz - Your gateway to local job opportunities and hiring solutions. Connecting job seekers with employers in their community.">
+    <meta name="keywords" content="local jobs, hire local, job seekers, job portal, Rozgar Buzz, community hiring">
+    <meta name="author" content="Rozgar Buzz">
+    <meta name="robots" content="index, follow">
+    <title>Rozgar Buzz | Find Local Jobs & Hire Job Seekers</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="#">Rozgar Buzz</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link active" href="#">Home</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/account/">Account</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contact">Contact Us</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <header class="bg-primary text-white text-center py-5">
+        <div class="container">
+            <h1 class="display-4">Find Local Jobs & Hire Talent with Ease</h1>
+            <p class="lead">Connecting job seekers and employers in one seamless platform.</p>
+            <a href="#jobs" class="btn btn-light btn-lg mt-3">Search Jobs</a>
+            <a href="#hire" class="btn btn-outline-light btn-lg mt-3">Hire Now</a>
+        </div>
+    </header>
+
+    <section id="jobs" class="py-5">
+        <div class="container text-center">
+            <h2>Search for Local Jobs</h2>
+            <p>Explore job listings in your area and apply today.</p>
+            <form class="d-flex justify-content-center">
+                <input class="form-control me-2" type="search" placeholder="Search for jobs..." aria-label="Search">
+                <button class="btn btn-primary" type="submit">Search</button>
+            </form>
+        </div>
+
+        <div class="container-fluid mt-5">
+            <div class="row">
+                {% for job in jobs %}
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ job.title }}</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">Job ID: {{ job.id }}</h6>
+                            <p class="card-text">{{ job.description }}</p>
+                            <p><strong>Pincode:</strong> {{ job.pincode }}</p>
+                            <a href="#" class="btn btn-primary">Apply Now</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <section id="hire" class="bg-light py-5">
+        <div class="container text-center">
+            <h2>Hire Local Talent</h2>
+            <p>Find the right candidate for your job openings quickly.</p>
+            <a href="#" class="btn btn-primary">Post a Job</a>
+        </div>
+    </section>
+
+    <section id="about" class="py-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h2>About Rozgar Buzz</h2>
+                    <p>Rozgar Buzz aims to bridge the gap between job seekers and employers by providing a user-friendly platform to connect and engage with each other locally.</p>
+                </div>
+                <div class="col-lg-6">
+                    <img src="about-image.jpg" alt="About Rozgar Buzz" class="img-fluid rounded">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="py-5 bg-dark text-white text-center">
+        <div class="container">
+            <h2>Contact Us</h2>
+            <p>Have questions? Reach out to us today!</p>
+            <a href="mailto:info@rozgarbuzz.com" class="btn btn-light">Email Us</a>
+        </div>
+    </section>
+
+    <footer class="bg-light py-4">
+        <div class="container text-center">
+            <p>&copy; 2025 Rozgar Buzz. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

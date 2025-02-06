@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hirer Sign Up</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
+
+    <!-- FontAwesome for icons -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f7fc;
+            color: #333;
+        }
+
+        .navbar {
+            background-color: #007bff;
+            padding: 15px 0;
+        }
+
+        .navbar a {
+            color: white;
+            font-size: 16px;
+            padding: 8px 15px;
+        }
+
+        .navbar a:hover {
+            background-color: #0056b3;
+        }
+
+        .container-fluid {
+            margin-top: 30px;
+        }
+
+        .row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .col-md-6 {
+            padding: 20px;
+        }
+        .cr {
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    
+}
+
+
+        .form-group label {
+            font-weight: 600;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .form-control {
+            border-radius: 25px;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+        }
+
+        .form-control:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.25);
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+            border-radius: 25px;
+            padding: 10px 25px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .input-group-text {
+            background-color: #f8f9fa;
+            border: none;
+            cursor: pointer;
+        }
+
+        .input-group-append {
+            position: absolute;
+            
+            right: 10px;
+            transform: translateY(-50%);
+        }
+
+        .img-fluid {
+            border-radius: 10px;
+            max-width: 100%;
+            height: auto;
+        }
+
+        .error {
+            color: red;
+            display: none;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .eye-icon {
+            cursor: pointer;
+        }
+
+        /* Make Country, State, and City fields inline */
+        .form-row .col-md-4 {
+            padding-right: 10px;
+            padding-left: 10px;
+        }
+
+        .form-row .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 12px;
+        }
+
+        /* Responsive Design Adjustments */
+        @media (max-width: 768px) {
+            .col-md-6 {
+                padding: 15px;
+            }
+
+            .form-row .col-md-4 {
+                margin-bottom: 10px;
+            }
+
+            .btn-primary {
+                padding: 10px;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+{% include 'nav.html' %}
+
+    <!-- Main Content -->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6 cr">
+                <img src="{{url_for('static', filename='hirersign.png') }}" class="img-fluid" alt="">
+            </div>
+            <div class="col-md-6 ">
+                <h4 class="display-4 text-center" style="font-weight: 600; color: #333;">Sign Up</h4>
+
+                <form id="signup-form">
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="firstname">First Name</label>
+                                <input type="text" class="form-control" id="firstname" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="lastname">Last Name</label>
+                                <input type="text" class="form-control" id="lastname" required>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" class="form-control" id="email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <div class="input-group">
+                            <input type="password" class="form-control" id="password" required>
+                            <div class="input-group-append">
+                                <span class="input-group-text eye-icon" onclick="togglePassword()">
+                                    <i class="fas fa-eye" id="password-eye"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirm-password">Confirm Password</label>
+                        <div class="input-group">
+                            <input type="password" class="form-control" id="confirm-password" required>
+                            <div class="input-group-append">
+                                <span class="input-group-text eye-icon" onclick="toggleConfirmPassword()">
+                                    <i class="fas fa-eye" id="confirm-password-eye"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="error" id="password-error">Passwords do not match</div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="country">Country</label>
+                                <select class="form-control p-2" id="country" onchange="populateStates()" required>
+                                    <option value="">Select Country</option>
+                                    <option value="India">India</option>
+                                    <option value="USA">USA</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="state">State</label>
+                                <select class="form-control p-2" id="state" onchange="populateCities()" required>
+                                    <option value="">Select State</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="city">City</label>
+                                <select class="form-control p-2" id="city" required>
+                                    <option value="">Select City</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script for Password Visibility Toggle -->
+    <script>
+        function togglePassword() {
+            var passwordField = document.getElementById("password");
+            var passwordEye = document.getElementById("password-eye");
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+                passwordEye.classList.replace("fa-eye", "fa-eye-slash");
+            } else {
+                passwordField.type = "password";
+                passwordEye.classList.replace("fa-eye-slash", "fa-eye");
+            }
+        }
+
+        function toggleConfirmPassword() {
+            var confirmPasswordField = document.getElementById("confirm-password");
+            var confirmPasswordEye = document.getElementById("confirm-password-eye");
+            if (confirmPasswordField.type === "password") {
+                confirmPasswordField.type = "text";
+                confirmPasswordEye.classList.replace("fa-eye", "fa-eye-slash");
+            } else {
+                confirmPasswordField.type = "password";
+                confirmPasswordEye.classList.replace("fa-eye-slash", "fa-eye");
+            }
+        }
+
+        // Form validation and submission
+        document.getElementById("signup-form").addEventListener("submit", function(event) {
+            event.preventDefault();
+            var password = document.getElementById("password").value;
+            var confirmPassword = document.getElementById("confirm-password").value;
+            if (password !== confirmPassword) {
+                document.getElementById("password-error").style.display = "block";
+            } else {
+                document.getElementById("password-error").style.display = "none";
+                alert("Form Submitted Successfully!");
+                // Send data to backend (Flask or other server)
+            }
+        });
+
+        // Country, State, City Data
+        const countryData = {
+            "India": {
+                "Madhya Pradesh": ["Bhopal", "Indore", "Gwalior", "Jabalpur"],
+                "Maharashtra": ["Mumbai", "Pune", "Nagpur", "Nashik"]
+            },
+            "USA": {
+                "California": ["Los Angeles", "San Francisco", "San Diego", "Sacramento"],
+                "Texas": ["Houston", "Dallas", "Austin", "San Antonio"]
+            }
+        };
+
+        // Populate states based on selected country
+        function populateStates() {
+            const country = document.getElementById("country").value;
+            const stateSelect = document.getElementById("state");
+            stateSelect.innerHTML = "<option value=''>Select State</option>"; // Reset state dropdown
+
+            if (countryData[country]) {
+                const states = Object.keys(countryData[country]);
+                states.forEach(state => {
+                    const option = document.createElement("option");
+                    option.value = state;
+                    option.textContent = state;
+                    stateSelect.appendChild(option);
+                });
+            }
+        }
+
+        // Populate cities based on selected state
+        function populateCities() {
+            const country = document.getElementById("country").value;
+            const state = document.getElementById("state").value;
+            const citySelect = document.getElementById("city");
+            citySelect.innerHTML = "<option value=''>Select City</option>"; // Reset city dropdown
+
+            if (country && state && countryData[country][state]) {
+                const cities = countryData[country][state];
+                cities.forEach(city => {
+                    const option = document.createElement("option");
+                    option.value = city;
+                    option.textContent = city;
+                    citySelect.appendChild(option);
+                });
+            }
+        }
+        if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            var latitude = position.coords.latitude;
+            var longitude = position.coords.longitude;
+            var locationField = document.getElementById("location");
+            locationField.value = `Latitude: ${latitude}, Longitude: ${longitude}`;
+        }, function(error) {
+            alert("Geolocation is not supported by this browser or the user denied permission.");
+        });
+    } else {
+        alert("Geolocation is not supported by this browser.");
+    }
+    </script>
+
+</body>
+
+</html>

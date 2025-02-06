@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Job</title>
+</head>
+<body>
+    <h1>Add Job</h1>
+
+    <form id="jobForm">
+        <div>
+            <label for="title">Job Title:</label>
+            <input type="text" id="title" name="title" required>
+        </div>
+        <div>
+            <label for="description">Job Description:</label>
+            <textarea id="description" name="description" required></textarea>
+        </div>
+        <div>
+            <label for="pincode">Pincode:</label>
+            <input type="text" id="pincode" name="pincode" required>
+        </div>
+        <div>
+            <button type="submit">Submit Job</button>
+        </div>
+    </form>
+
+    <div id="responseMessage"></div>
+
+    <script>
+        // Handle form submission
+        document.getElementById('jobForm').addEventListener('submit', function(event) {
+            event.preventDefault();  // Prevent the default form submission
+
+            // Collect the form data
+            const jobData = {
+                title: document.getElementById('title').value,
+                description: document.getElementById('description').value,
+                pincode: document.getElementById('pincode').value
+            };
+
+            // Send the POST request
+            fetch('http://127.0.0.1:5000/add-job', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(jobData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    document.getElementById('responseMessage').innerText = 'Job added successfully!';
+                } else if (data.error) {
+                    document.getElementById('responseMessage').innerText = `Error: ${data.error}`;
+                }
+                console.log(data);
+            })
+            .catch(error => {
+                document.getElementById('responseMessage').innerText = 'Error adding job.';
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>
