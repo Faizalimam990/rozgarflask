@@ -50,13 +50,12 @@
         .col-md-6 {
             padding: 20px;
         }
-        .cr {
-    border-radius: 10px;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-    padding: 30px;
-    
-}
 
+        .cr {
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
 
         .form-group label {
             font-weight: 600;
@@ -97,7 +96,7 @@
 
         .input-group-append {
             position: absolute;
-            
+            top: 50%;
             right: 10px;
             transform: translateY(-50%);
         }
@@ -119,7 +118,6 @@
             cursor: pointer;
         }
 
-        /* Make Country, State, and City fields inline */
         .form-row .col-md-4 {
             padding-right: 10px;
             padding-left: 10px;
@@ -134,7 +132,6 @@
             padding: 12px;
         }
 
-        /* Responsive Design Adjustments */
         @media (max-width: 768px) {
             .col-md-6 {
                 padding: 15px;
@@ -149,107 +146,161 @@
             }
         }
 
+        /* New Design Elements */
+        .form-header {
+            background-color: #007bff;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .form-section {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-footer {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .form-footer a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .form-footer a:hover {
+            text-decoration: underline;
+        }
+
+        .container-fluid {
+            padding: 40px;
+        }
     </style>
 </head>
 
 <body>
-{% include 'nav.html' %}
+    {% include 'nav.html' %}
 
     <!-- Main Content -->
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-6 cr">
-                <img src="{{url_for('static', filename='hirersign.png') }}" class="img-fluid" alt="">
-            </div>
-            <div class="col-md-6 ">
-                <h4 class="display-4 text-center" style="font-weight: 600; color: #333;">Sign Up</h4>
-
-                <form id="signup-form">
-                    <div class="form-row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="firstname">First Name</label>
-                                <input type="text" class="form-control" id="firstname" required>
+            <div class="col-md-6">
+                <h4 class="display-4 text-center form-header" style="font-weight: 600;">Sign Up</h4>
+                <div class="container mt-3">
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            <div class="alert alert-{{ messages[0][0] }} alert-dismissible fade show" role="alert">
+                                {{ messages[0][1] }}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        {% endif %}
+                    {% endwith %}
+                </div>
+                <form id="signup-form" method="POST">
+                    <div class="form-section">
+                        <div class="form-row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="firstname">First Name</label>
+                                    <input type="text" class="form-control" name="firstname" id="firstname" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="lastname">Last Name</label>
+                                    <input type="text" class="form-control" name="lastname" id="lastname" required>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="lastname">Last Name</label>
-                                <input type="text" class="form-control" id="lastname" required>
+
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" class="form-control" name="email" id="email" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone_number">Phone Number</label>
+                            <input type="tel" class="form-control" name="phone_number" id="phone_number" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <div class="input-group">
+                                <input type="password" class="form-control" name="password" id="password" required>
+                                <div class="input-group-append">
+                                    <span class="input-group-text eye-icon" onclick="togglePassword()">
+                                        <i class="fas fa-eye" id="password-eye"></i>
+                                    </span>
+                                </div>
                             </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="confirm-password">Confirm Password</label>
+                            <div class="input-group">
+                                <input type="password" class="form-control" name="confirm-password" id="confirm-password" required>
+                                <div class="input-group-append">
+                                    <span class="input-group-text eye-icon" onclick="toggleConfirmPassword()">
+                                        <i class="fas fa-eye" id="confirm-password-eye"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="error" id="password-error">Passwords do not match</div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="country">Country</label>
+                                    <select class="form-control p-2" id="country" name="country" onchange="populateStates()" required>
+                                        <option value="">Select Country</option>
+                                        <option value="India">India</option>
+                                        <option value="USA">USA</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="state">State</label>
+                                    <select class="form-control p-2" name="state" id="state" onchange="populateCities()" required>
+                                        <option value="">Select State</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="city">City</label>
+                                    <select name="city" class="form-control p-2" id="city" required>
+                                        <option value="">Select City</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-footer">
+                            <input type="submit" class="btn btn-primary btn-block">
+                            <p>Already have an account? <a href="#">Log In</a></p>
                         </div>
                     </div>
-
-
-                    <div class="form-group">
-                        <label for="email">Email Address</label>
-                        <input type="email" class="form-control" id="email" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="password">Password</label>
-                        <div class="input-group">
-                            <input type="password" class="form-control" id="password" required>
-                            <div class="input-group-append">
-                                <span class="input-group-text eye-icon" onclick="togglePassword()">
-                                    <i class="fas fa-eye" id="password-eye"></i>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="confirm-password">Confirm Password</label>
-                        <div class="input-group">
-                            <input type="password" class="form-control" id="confirm-password" required>
-                            <div class="input-group-append">
-                                <span class="input-group-text eye-icon" onclick="toggleConfirmPassword()">
-                                    <i class="fas fa-eye" id="confirm-password-eye"></i>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="error" id="password-error">Passwords do not match</div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="country">Country</label>
-                                <select class="form-control p-2" id="country" onchange="populateStates()" required>
-                                    <option value="">Select Country</option>
-                                    <option value="India">India</option>
-                                    <option value="USA">USA</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="state">State</label>
-                                <select class="form-control p-2" id="state" onchange="populateCities()" required>
-                                    <option value="">Select State</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="city">City</label>
-                                <select class="form-control p-2" id="city" required>
-                                    <option value="">Select City</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
                 </form>
+            </div>
+
+            <div class="col-md-6 cr">
+                <img src="{{url_for('static', filename='hirersign.png') }}" class="img-fluid" alt="Hirer Sign-Up">
             </div>
         </div>
     </div>
 
-    <!-- Script for Password Visibility Toggle -->
     <script>
+        // Password visibility toggle functions
         function togglePassword() {
             var passwordField = document.getElementById("password");
             var passwordEye = document.getElementById("password-eye");
@@ -274,21 +325,7 @@
             }
         }
 
-        // Form validation and submission
-        document.getElementById("signup-form").addEventListener("submit", function(event) {
-            event.preventDefault();
-            var password = document.getElementById("password").value;
-            var confirmPassword = document.getElementById("confirm-password").value;
-            if (password !== confirmPassword) {
-                document.getElementById("password-error").style.display = "block";
-            } else {
-                document.getElementById("password-error").style.display = "none";
-                alert("Form Submitted Successfully!");
-                // Send data to backend (Flask or other server)
-            }
-        });
-
-        // Country, State, City Data
+        // Populate states and cities based on selection
         const countryData = {
             "India": {
                 "Madhya Pradesh": ["Bhopal", "Indore", "Gwalior", "Jabalpur"],
@@ -300,11 +337,10 @@
             }
         };
 
-        // Populate states based on selected country
         function populateStates() {
             const country = document.getElementById("country").value;
             const stateSelect = document.getElementById("state");
-            stateSelect.innerHTML = "<option value=''>Select State</option>"; // Reset state dropdown
+            stateSelect.innerHTML = "<option value=''>Select State</option>";
 
             if (countryData[country]) {
                 const states = Object.keys(countryData[country]);
@@ -317,12 +353,11 @@
             }
         }
 
-        // Populate cities based on selected state
         function populateCities() {
             const country = document.getElementById("country").value;
             const state = document.getElementById("state").value;
             const citySelect = document.getElementById("city");
-            citySelect.innerHTML = "<option value=''>Select City</option>"; // Reset city dropdown
+            citySelect.innerHTML = "<option value=''>Select City</option>";
 
             if (country && state && countryData[country][state]) {
                 const cities = countryData[country][state];
@@ -334,20 +369,7 @@
                 });
             }
         }
-        if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
-            var latitude = position.coords.latitude;
-            var longitude = position.coords.longitude;
-            var locationField = document.getElementById("location");
-            locationField.value = `Latitude: ${latitude}, Longitude: ${longitude}`;
-        }, function(error) {
-            alert("Geolocation is not supported by this browser or the user denied permission.");
-        });
-    } else {
-        alert("Geolocation is not supported by this browser.");
-    }
     </script>
-
 </body>
 
 </html>

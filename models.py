@@ -25,7 +25,11 @@ class Hirer(base):
     lastname = Column(String(100), nullable=False)
     phone_number = Column(String(15), nullable=False, unique=True)
     verified = Column(String(10), default="NO")
-    Location = Column(String(255), nullable=False)
+    city=Column(String(20))
+    state=Column(String(20))
+    email=Column(String(50))
+    password=Column(String(50))
+    country=Column(String(20))
     role=Column(String(255),default='Hirer')
     
     
